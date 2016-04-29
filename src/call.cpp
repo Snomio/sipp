@@ -923,9 +923,18 @@ char * call::get_last_header(const char * name)
     if (name[len - 1] == ':') {
         return get_header(last_recv_msg, name, false);
     } else {
+
+        bool content = false;
         char with_colon[MAX_HEADER_LEN];
-        sprintf(with_colon, "%s:", name);
-        return get_header(last_recv_msg, with_colon, false);
+        const char *sep = strrchr(name, ':');
+
+        if (sep && !strcmp(sep, ":value")) {
+            content = true;
+            snprintf(with_colon, len - 4, "%s", name);
+        } else {
+            sprintf(with_colon, "%s:", name);
+        }
+        return get_header(last_recv_msg, with_colon, content);
     }
 }
 
