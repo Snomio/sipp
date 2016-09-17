@@ -3510,6 +3510,8 @@ call::T_ActionResult call::executeAction(char * msg, message *curmsg)
         } else if (currentAction->getActionType() == CAction::E_AT_PAUSE_RESTORE) {
             double operand = get_rhs(currentAction);
             paused_until = (int)operand;
+        } else if (currentAction->getActionType() == CAction::E_AT_RTP_ECHO) {
+            rtp_echo_state = (currentAction->getDoubleValue() != 0 ? true : false);
         } else if (currentAction->getActionType() == CAction::E_AT_VAR_ADD) {
             double value = M_callVariableTable->getVar(currentAction->getVarId())->getDouble();
             double operand = get_rhs(currentAction);

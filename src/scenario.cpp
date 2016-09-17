@@ -1481,6 +1481,9 @@ void scenario::parseAction(CActions *actions)
         } else if(!strcmp(actionElem, "pauserestore")) {
             tmpAction->setActionType(CAction::E_AT_PAUSE_RESTORE);
             handle_rhs(tmpAction, "pauserestore");
+        } else if(!strcmp(actionElem, "rtp_echo")) {
+            tmpAction->setActionType(CAction::E_AT_RTP_ECHO);
+            handle_rhs(tmpAction, "rtp_echo");
         } else if(!strcmp(actionElem, "add")) {
             tmpAction->setActionType(CAction::E_AT_VAR_ADD);
             handle_arithmetic(tmpAction, "add");
