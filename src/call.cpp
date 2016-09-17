@@ -2753,10 +2753,14 @@ bool call::matches_scenario(unsigned int index, int reply_code, char * request, 
         } else if (index == 0) {
             /* Always true for the first message. */
             return true;
-        } else if (curmsg->recv_response_for_cseq_method_list &&
-                   strstr(curmsg->recv_response_for_cseq_method_list, responsecseqmethod)) {
+        } else if (curmsg->recv_response_for_cseq_method_list){
+            if (no_cseq_method_match) {
+                return true;
+            }
             /* If we do not have a transaction defined, we just check the CSEQ method. */
-            return true;
+            if (strstr(curmsg->recv_response_for_cseq_method_list, responsecseqmethod)) {
+                return true;
+            }
         } else {
             return false;
         }
