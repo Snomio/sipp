@@ -206,7 +206,8 @@ struct sipp_option options_table[] = {
    {"dynamicStart", "variable value\nSet the start offset of dynamic_id variable",  SIPP_OPTION_INT, &startDynamicId, 1},
    {"dynamicMax",   "variable value\nSet the maximum of dynamic_id variable     ",   SIPP_OPTION_INT, &maxDynamicId,   1},
    {"dynamicStep",  "variable value\nSet the increment of dynamic_id variable",      SIPP_OPTION_INT, &stepDynamicId,  1},
-
+   {"ncmm", "no cseq method match", SIPP_OPTION_SETFLAG, &no_cseq_method_match, 0},
+   {"ndcw", "no dead call warning", SIPP_OPTION_SETFLAG, &no_dead_call_warning, 0},
 
     {"", "Call behavior options:", SIPP_HELP_TEXT_HEADER, NULL, 0},
     {"aa", "Enable automatic 200 OK answer for INFO, NOTIFY, OPTIONS and UPDATE.", SIPP_OPTION_SETFLAG, &auto_answer, 1},

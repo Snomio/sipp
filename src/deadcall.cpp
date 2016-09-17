@@ -72,13 +72,13 @@ bool deadcall::process_incoming(char * msg, struct sockaddr_storage * /*src*/)
 
     setRunning();
 
-    snprintf(buffer, MAX_HEADER_LEN, "Dead call %s (%s)", id, reason);
-
-    WARNING("%s, received '%s'", buffer, msg);
-
-    TRACE_MSG("-----------------------------------------------\n"
-              "Dead call %s received a %s message:\n\n%s\n",
-              id, TRANSPORT_TO_STRING(transport), msg);
+    if (no_dead_call_warning) {
+        snprintf(buffer, MAX_HEADER_LEN, "Dead call %s (%s)", id, reason);
+        WARNING("%s, received '%s'", buffer, msg);
+        TRACE_MSG("-----------------------------------------------\n"
+                  "Dead call %s received a %s message:\n\n%s\n",
+                  id, TRANSPORT_TO_STRING(transport), msg);
+    }
 
     expiration = clock_tick + deadcall_wait;
     return run();
@@ -87,7 +87,9 @@ bool deadcall::process_incoming(char * msg, struct sockaddr_storage * /*src*/)
 bool deadcall::process_twinSippCom(char * msg)
 {
     CStat::globalStat(CStat::E_DEAD_CALL_MSGS);
-    TRACE_MSG("Received twin message for dead (%s) call %s:%s\n", reason, id, msg);
+    if (no_dead_call_warning) {
+        TRACE_MSG("Received twin message for dead (%s) call %s:%s\n", reason, id, msg);
+    }
     return true;
 }
 
@@ -110,5 +112,7 @@ unsigned int deadcall::wake()
 /* Dump call info to error log. */
 void deadcall::dump()
 {
-    WARNING("%s: Dead Call (%s) expiring at %lu", id, reason, expiration);
+    if (no_dead_call_warning) {
+        WARNING("%s: Dead Call (%s) expiring at %lu", id, reason, expiration);
+    }
 }
