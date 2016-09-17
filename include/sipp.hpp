@@ -291,6 +291,7 @@ extern bool               nostdin                 _DEFVAL(false);
 extern bool               use_curses              _DEFVAL(true);
 extern bool               backgroundMode          _DEFVAL(false);
 extern bool               no_cseq_method_match    _DEFVAL(false);
+extern bool               no_dead_call_warning    _DEFVAL(false);
 extern bool               signalDump              _DEFVAL(false);
 
 extern int                currentScreenToDisplay  _DEFVAL
