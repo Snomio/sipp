@@ -929,16 +929,64 @@ char * call::get_last_header(const char * name)
     }
 }
 
+/* Return the last tag from the header line. On any error returns the
+ * empty string.  The caller must free the result. */
+char * call::get_last_tag(const char *name)
+{
+    char * tmp;
+    char * tmp2;
+    char * result;
+    char * last_To;
+    int tmp_len;
+
+    if (!name || !strlen(name)) {
+        return strdup("");
+    }
+
+    last_To = get_last_header(name);
+    if (!last_To) {
+        return strdup("");
+    }
+
+    tmp = strcasestr(last_To, "tag=");
+    if (!tmp) {
+        return strdup("");
+    }
+
+    tmp += strlen("tag=");
+    tmp2 = tmp;
+    
+    while (*tmp2 && *tmp2 != ';' && *tmp2!='\r' && *tmp2!='\n') tmp2++;
+    
+    tmp_len = strlen(tmp) - strlen(tmp2);
+    if (tmp_len < 0) {
+        return strdup("");
+    }
+    if(!(result = (char *) malloc(tmp_len+1))) ERROR("call::get_last_tag: Cannot allocate !\n");
+    memset(result, 0, sizeof(&result));
+    if(tmp && (tmp_len > 0)){
+        strncpy(result, tmp, tmp_len);
+    }
+    result[tmp_len] = '\0';
+    return result;
+}
+
 /* Return the last request URI from the To header. On any error returns the
  * empty string.  The caller must free the result. */
-char * call::get_last_request_uri()
+char * call::get_last_request_uri(const char *name)
 {
     char * tmp;
     char * tmp2;
     char * last_request_uri;
+    char * last_To;
     int tmp_len;
 
-    char * last_To = get_last_header("To:");
+    if (!name || !strlen(name)) {
+        return strdup("");
+    }
+
+    last_To = get_last_header(name);    
+    
     if (!last_To) {
         return strdup("");
     }
@@ -2201,9 +2249,27 @@ char* call::createSendingMessage(SendingMessage *src, int P_index, char *msg_buf
             }
             break;
         case E_Message_Last_Request_URI: {
-            char * last_request_uri = get_last_request_uri();
+            char * last_request_uri = get_last_request_uri("To:");
             dest += sprintf(dest, "%s", last_request_uri);
             free(last_request_uri);
+            break;
+        }
+        case E_Message_Last_Contact_URI: {
+            char * last_contact_uri = get_last_request_uri("Contact:");
+            dest += sprintf(dest, "%s", last_contact_uri);
+            free(last_contact_uri);
+            break;
+        }
+        case E_Message_Last_From_Tag: {
+            char * tag = get_last_tag("From:");
+            dest += sprintf(dest, "%s", tag);
+            free(tag);
+            break;
+        }
+        case E_Message_Last_To_Tag: {
+            char * tag = get_last_tag("To:");
+            dest += sprintf(dest, "%s", tag);
+            free(tag);
             break;
         }
         case E_Message_Last_CSeq_Number: {
