@@ -302,6 +302,7 @@ extern char             * auth_uri                _DEFVAL(0);
 extern const char       * call_id_string          _DEFVAL("%u-%p@%s");
 extern char             **generic[100];
 
+extern bool               rtp_echo_state          _DEFVAL(true);
 extern bool               callidSlash             _DEFVAL(false);
 
 /* TDM map */

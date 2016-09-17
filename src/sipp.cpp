@@ -604,6 +604,9 @@ static void rtp_echo_thread(void* param)
                     errno);
             return;
         }
+        if (rtp_echo_state == false) {
+            continue;
+        }
         ns = sendto(*(int*)param, msg, nr, 0,
                     (sockaddr*)&remote_rtp_addr, len);
 
