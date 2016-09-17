@@ -964,9 +964,9 @@ char * call::get_last_tag(const char *name)
 
     tmp += strlen("tag=");
     tmp2 = tmp;
-    
+
     while (*tmp2 && *tmp2 != ';' && *tmp2!='\r' && *tmp2!='\n') tmp2++;
-    
+
     tmp_len = strlen(tmp) - strlen(tmp2);
     if (tmp_len < 0) {
         return strdup("");
@@ -994,8 +994,8 @@ char * call::get_last_request_uri(const char *name)
         return strdup("");
     }
 
-    last_To = get_last_header(name);    
-    
+    last_To = get_last_header(name);
+
     if (!last_To) {
         return strdup("");
     }
