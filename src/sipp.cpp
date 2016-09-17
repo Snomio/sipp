@@ -768,6 +768,7 @@ static void help()
         "   code:\n"
         "    0: All calls were successful\n"
         "    1: At least one call failed\n"
+        "   96: Execution interrupted by SIGINT signal\n"
         "   97: Exit on internal command. Calls may have been processed\n"
         "   99: Normal exit without calls processed\n"
         "   -1: Fatal error\n"
@@ -1021,16 +1022,23 @@ static void sipp_sighandler(int signum)
     sipp_exit(EXIT_TEST_RES_UNKNOWN);
 }
 
+static void sipp_siginthandler(int signum)
+{
+    sipp_exit(EXIT_TEST_INTERRUPTED);
+}
+
 static void sighandle_set()
 {
     struct sigaction action_quit = {};
+    struct sigaction action_int = {};
     struct sigaction action_file_size_exceeded = {};
 
     action_quit.sa_handler = sipp_sighandler;
+    action_int.sa_handler = sipp_siginthandler;
     action_file_size_exceeded.sa_handler = manage_oversized_file;
 
     sigaction(SIGTERM, &action_quit, NULL);
-    sigaction(SIGINT, &action_quit, NULL);
+    sigaction(SIGINT, &action_int, NULL);
     sigaction(SIGXFSZ, &action_file_size_exceeded, NULL);  // avoid core dump if the max file size is exceeded
 }
 
