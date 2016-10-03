@@ -18,7 +18,15 @@ wait $job || status=1
 
 if test $status -eq 0; then
     if grep -e ^LAST\ From:\ \"Tom\ Jones\"\ \<sip:tom.jones@wales.uk\>\;tag=SIPpTag001$ log.log > /dev/null; then
-        ok
+        if grep -e ^LAST\ To:uri:\ sip:cheese@paris.fr$ log.log > /dev/null; then
+            if grep -e ^LAST\ From-tag:\ SIPpTag001$ log.log > /dev/null; then
+                ok
+            else
+                fail "From:param.tag not found"
+            fi
+        else
+            fail "To:uri not found"
+        fi
     else
         fail "From header not found"
     fi

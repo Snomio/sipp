@@ -10,7 +10,7 @@
       To: "Fromage" <sip:cheese@paris.fr>
       Call-ID: [call_id]
       CSeq: 1 INVITE
-      Contact: sip:sipp@[local_ip]:[local_port]
+      Contact: <sip:sipp@[local_ip]:[local_port]>
       Content-Length: 0
 
     ]]>
